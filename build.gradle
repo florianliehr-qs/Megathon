@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.5.4'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'checkstyle'
 }
 
 group = 'de.megathon'
@@ -49,4 +50,47 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+/**
+ * Checkstyle Configuration
+ * -----------------------
+ * This project uses a custom Checkstyle configuration that enforces tab-based indentation.
+ * Checkstyle MUST pass without any warnings or errors for the build to succeed.
+ *
+ * How to use:
+ * 1. Run './gradlew checkstyleMain' to check main source code
+ * 2. Run './gradlew checkstyleTest' to check test source code
+ * 3. Run './gradlew check' to run all checks including Checkstyle
+ *
+ * Reports are generated in:
+ * - build/reports/checkstyle/main.html (for main source code)
+ * - build/reports/checkstyle/test.html (for test source code)
+ */
+checkstyle {
+    toolVersion = '10.12.5'  // Latest stable version as of 2025-07-29
+    configDirectory = file("${rootDir}/config/checkstyle")
+
+    // Use custom configuration that supports tab indentation
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+
+    // STRICT: No errors or warnings allowed
+    maxErrors = 0
+    maxWarnings = 0
+    ignoreFailures = false
+}
+
+tasks.named('checkstyleMain') {
+    group = 'verification'
+    description = 'Runs Checkstyle on main source set with tab indentation support'
+}
+
+tasks.named('checkstyleTest') {
+    group = 'verification'
+    description = 'Runs Checkstyle on test source set with tab indentation support'
+}
+
+// Ensure that the 'check' task (which is part of build) includes checkstyle
+tasks.named('check') {
+    dependsOn 'checkstyleMain', 'checkstyleTest'
 }

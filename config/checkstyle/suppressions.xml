@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+    <!-- Suppress checks for generated code -->
+    <suppress files="[\\/]build[\\/]" checks=".*"/>
+    <suppress files="[\\/]target[\\/]" checks=".*"/>
+    <suppress files="[\\/]generated-sources[\\/]" checks=".*"/>
+    
+    <!-- Suppress checks for test code -->
+    <suppress files="[\\/]src[\\/]test[\\/]" checks="MissingJavadocMethod"/>
+    <suppress files="[\\/]src[\\/]test[\\/]" checks="MissingJavadocType"/>
+    
+    <!-- Suppress checks for Spring Boot application class -->
+    <suppress files="MegathonApplication\.java" checks="HideUtilityClassConstructor"/>
+    
+    <!-- Suppress line length for specific cases -->
+    <suppress files=".*Test\.java" checks="LineLength"/>
+</suppressions>

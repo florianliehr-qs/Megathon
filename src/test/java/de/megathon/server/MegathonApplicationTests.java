@@ -10,5 +10,4 @@ class MegathonApplicationTests {
     void contextLoads() {
         //TODO @fliehr (27.07.2025) Fill with actual tests
     }
-
 }

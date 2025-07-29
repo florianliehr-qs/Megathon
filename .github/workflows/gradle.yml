@@ -36,8 +36,38 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x gradlew
 
+    # Run Checkstyle first to ensure code quality standards
+    - name: Run Checkstyle
+      run: ./gradlew checkstyleMain checkstyleTest
+      
+    # Upload Checkstyle reports as artifacts for debugging if needed
+    - name: Upload Checkstyle reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: checkstyle-reports
+        path: |
+          build/reports/checkstyle/
+        retention-days: 30
+
+    # Run tests
+    - name: Run tests
+      run: ./gradlew test
+
+    # Build the application (this will also run checkstyle as part of the 'check' task)
     - name: Build with Gradle Wrapper
       run: ./gradlew build
+
+    # Upload test reports as artifacts
+    - name: Upload test reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-reports
+        path: |
+          build/reports/tests/
+          build/test-results/
+        retention-days: 30
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
